@@ -1,5 +1,12 @@
-import '@/styles/globals.css'
+import GlobalStyles from "../components/GlobalStyles";
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  return (
+    <>
+      <GlobalStyles />
+      <Component {...pageProps} />
+    </>
+  );
 }
+
+export default MyApp;
