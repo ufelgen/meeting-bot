@@ -6,6 +6,7 @@ export default function RobotFace() {
       <Face>
         <LeftEye /> <RightEye />
         <LeftPupil /> <RightPupil />
+        <Mouth />
       </Face>
     </Container>
   );
@@ -34,12 +35,12 @@ const Eye = styled.div`
 `;
 
 const LeftEye = styled(Eye)`
-  top: 20px;
+  top: 40px;
   left: 40px;
 `;
 
 const RightEye = styled(Eye)`
-  top: 20px;
+  top: 40px;
   right: 40px;
 `;
 
@@ -53,11 +54,21 @@ const Pupil = styled.div`
 `;
 
 const LeftPupil = styled(Pupil)`
-  top: 40px;
+  top: 60px;
   left: 55px;
 `;
 
 const RightPupil = styled(Pupil)`
-  top: 40px;
+  top: 60px;
   right: 55px;
+`;
+
+const Mouth = styled.div`
+  position: absolute;
+  border: 2px solid black;
+  background-color: white;
+  height: 50px;
+  width: 150px;
+  top: 150px;
+  left: 50px;
 `;

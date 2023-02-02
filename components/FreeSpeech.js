@@ -50,30 +50,58 @@ export default function FreeSpeech() {
   }
 
   return (
-    <>
-      <section>
-        <div>
-          <textarea
-            value={text}
-            onChange={(event) => setText(event.target.value)}
-          />
-        </div>
-        <div>
-          <button onClick={speak}>speak</button>
-          <button onClick={pause}>pause</button>
-          <button onClick={resume}>resume</button>
-          <button onClick={cancel}>cancel</button>
-        </div>
-        {isSpeaking && "speaking"}
-        {isPaused && "paused"}
-        {isResumed && "resumed"}
-        {isEnded && "cancelled"}
-      </section>
-      <section>
+    <Container>
+      <ButtonSection>
         <button onClick={greeting}>greeting</button>
         <button onClick={agree}>agree</button>
         <button onClick={disagree}>disagree</button>
-      </section>
-    </>
+      </ButtonSection>
+      <Textarea
+        value={text}
+        cols={35}
+        rows={10}
+        onChange={(event) => setText(event.target.value)}
+      />
+
+      <SecondSection>
+        <button onClick={speak}>speak</button>
+        <button onClick={pause}>pause</button>
+        <button onClick={resume}>resume</button>
+        <button onClick={cancel}>cancel</button>
+      </SecondSection>
+      {isSpeaking && "speaking"}
+      {isPaused && "paused"}
+      {isResumed && "resumed"}
+      {isEnded && "cancelled"}
+    </Container>
   );
 }
+
+const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem;
+`;
+
+const ButtonSection = styled.section`
+  align-items: space-around;
+  margin-bottom: 1rem;
+
+  button {
+    background-color: black;
+    color: white;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+  }
+`;
+
+const Textarea = styled.textarea`
+  border: 1px solid black;
+`;
+
+const SecondSection = styled(ButtonSection)`
+  margin: 0;
+`;
