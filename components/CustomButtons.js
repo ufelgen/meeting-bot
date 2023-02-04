@@ -35,11 +35,8 @@ export default function CustomButtons({
       <AllCustomButtonsContainer>
         {customButtons?.map((button) => {
           return (
-            <CustomButtonContainer>
-              <CustomButton
-                key={button.name}
-                onClick={() => onSpeak(button.message)}
-              >
+            <CustomButtonContainer key={button.name}>
+              <CustomButton onClick={() => onSpeak(button.message)}>
                 {button.name}
               </CustomButton>
               <DeleteButton onClick={() => onDeleteButton(button.id)}>
