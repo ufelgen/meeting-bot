@@ -2,6 +2,14 @@ import styled from "styled-components";
 import { useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import { useSpeechSynthesisApi } from "@/hooks/WebSpeech";
+import PresetButtons from "./PresetButtons";
+import CustomButtons from "./CustomButtons";
+import {
+  SelectButtonSection,
+  Textarea,
+  StyledCommands,
+  SecondSection,
+} from "./StylesForSpeech";
 
 export default function FreeSpeech() {
   const {
@@ -17,11 +25,14 @@ export default function FreeSpeech() {
     cancel,
   } = useSpeechSynthesisApi();
 
-  const testArray = [{ name: "test", message: "huhu testi" }];
+  const testArray = [{ id: 1, name: "test", message: "huhu testi" }];
   const [input, setInput] = useState("preset");
-  const [custom, setCustom] = useLocalStorageState("custom", {
-    defaultValue: testArray,
-  });
+  const [customButtons, setCustomButtons] = useLocalStorageState(
+    "customButtons",
+    {
+      defaultValue: testArray,
+    }
+  );
   const [buttonForm, setButtonForm] = useState(false);
 
   /*   if (typeof window !== "undefined") {
@@ -30,6 +41,9 @@ export default function FreeSpeech() {
     return amISpeaking;
   }
  */
+  function handleToggleButtonForm() {
+    setButtonForm(!buttonForm);
+  }
 
   function handleSpeak(message) {
     let msg = new SpeechSynthesisUtterance();
@@ -42,7 +56,19 @@ export default function FreeSpeech() {
     speak();
   }
 
-  function handleNewButton() {}
+  function handleNewButton(newButton) {
+    setCustomButtons([...customButtons, newButton]);
+  }
+
+  function handleDeleteButton(buttonId) {
+    const confirmation = confirm("do you want to delete this phrase?");
+    if (confirmation) {
+      setCustomButtons(
+        customButtons.filter((button) => button.id !== buttonId)
+      );
+    }
+  }
+  console.log(customButtons);
   return (
     <>
       <Container>
@@ -66,68 +92,17 @@ export default function FreeSpeech() {
             freestyle
           </button>
         </SelectButtonSection>
-        {input === "preset" && (
-          <ButtonSection>
-            <button
-              onClick={() =>
-                handleSpeak(
-                  "Hello and welcome to another useless meeting that could have been an email"
-                )
-              }
-            >
-              greeting
-            </button>
-            <button
-              onClick={() =>
-                handleSpeak("What a great idea. Can we go home now?")
-              }
-            >
-              agree
-            </button>
-            <button
-              onClick={() =>
-                handleSpeak(
-                  "That is a terrible idea. Please exercise better judgement."
-                )
-              }
-            >
-              disagree
-            </button>
-          </ButtonSection>
-        )}
+        {input === "preset" && <PresetButtons onSpeak={handleSpeak} />}
 
         {input === "custom" && (
-          <CustomSection>
-            <AddButton onClick={() => setButtonForm(true)}>+</AddButton>
-            <ButtonSection>
-              {custom.map((button) => {
-                return (
-                  <button
-                    key={button.name}
-                    onClick={() => handleSpeak(button.message)}
-                  >
-                    {button.name}
-                  </button>
-                );
-              })}
-            </ButtonSection>
-            {buttonForm && (
-              <form onSubmit={handleNewButton}>
-                <label htmlFor="name"></label>
-                <input id="name" name="name" placeholder="name your phrase" />
-                <label htmlFor="message"></label>
-                <textarea
-                  id="message"
-                  name="message"
-                  placeholder="what's your phrase?"
-                />
-                <button type="submit">add</button>
-                <button type="button" onClick={() => setButtonForm(false)}>
-                  cancel
-                </button>
-              </form>
-            )}
-          </CustomSection>
+          <CustomButtons
+            onToggleButtonForm={handleToggleButtonForm}
+            onSpeak={handleSpeak}
+            onAddNewButton={handleNewButton}
+            customButtons={customButtons}
+            buttonForm={buttonForm}
+            onDeleteButton={handleDeleteButton}
+          />
         )}
 
         {input === "freestyle" && (
@@ -141,7 +116,7 @@ export default function FreeSpeech() {
 
         <StyledCommands>
           <SecondSection>
-            <button onClick={speak}>speak</button>
+            {input === "freestyle" && <button onClick={speak}>speak</button>}
             <button onClick={pause}>pause</button>
             <button onClick={resume}>resume</button>
             <button onClick={cancel}>cancel</button>
@@ -158,62 +133,4 @@ const Container = styled.section`
   align-items: center;
   justify-content: center;
   margin: 2rem;
-`;
-
-const ButtonSection = styled.section`
-  align-items: space-around;
-  margin-bottom: 1rem;
-
-  button {
-    background-color: black;
-    color: white;
-    margin: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 5px;
-  }
-`;
-const SelectButtonSection = styled(ButtonSection)`
-  width: 90vw;
-
-  button {
-    width: 33.3%;
-    margin: 0;
-
-    &.current {
-      background-color: darkgrey;
-      color: black;
-    }
-  }
-`;
-const Textarea = styled.textarea`
-  border: 1px solid black;
-`;
-
-const SecondSection = styled(ButtonSection)`
-  margin: 0;
-`;
-
-const StyledCommands = styled.footer`
-  position: fixed;
-  bottom: 0;
-  height: 10vh;
-`;
-
-const CustomSection = styled.section`
-  position: relative;
-  height: 22vh;
-  width: 90vw;
-  overflow-y: scroll;
-`;
-
-const AddButton = styled.button`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  height: 20px;
-  width: 20px;
-  background-color: black;
-  color: white;
-  border: none;
-  border-radius: 10px;
 `;
