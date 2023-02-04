@@ -53,6 +53,7 @@ export const useSpeechSynthesisApi = () => {
     setIsSpeaking(false);
     setIsEnded(true);
   }, []);
+
   return {
     text,
     setText,
