@@ -1,5 +1,15 @@
 import styled from "styled-components";
+import { useState } from "react";
+import useLocalStorageState from "use-local-storage-state";
 import { useSpeechSynthesisApi } from "@/hooks/WebSpeech";
+import PresetButtons from "./PresetButtons";
+import CustomButtons from "./CustomButtons";
+import {
+  SelectButtonSection,
+  Textarea,
+  StyledCommands,
+  SecondSection,
+} from "./StylesForSpeech";
 
 export default function FreeSpeech() {
   const {
@@ -13,67 +23,110 @@ export default function FreeSpeech() {
     pause,
     resume,
     cancel,
+    voices,
   } = useSpeechSynthesisApi();
 
-  function greeting() {
+  const testArray = [{ id: 1, name: "test", message: "huhu testi" }];
+  const [input, setInput] = useState("preset");
+  const [customButtons, setCustomButtons] = useLocalStorageState(
+    "customButtons",
+    {
+      defaultValue: testArray,
+    }
+  );
+  const [buttonForm, setButtonForm] = useState(false);
+  console.log("voices", voices);
+  /*   if (typeof window !== "undefined") {
+    const synth = window.speechSynthesis;
+    const amISpeaking = synth.speaking;
+    return amISpeaking;
+  }
+ */
+  function handleToggleButtonForm() {
+    setButtonForm(!buttonForm);
+  }
+
+  function handleSpeak(message) {
     let msg = new SpeechSynthesisUtterance();
 
-    msg.text =
-      "Hello and welcome to another useless meeting that could have been an email";
-    msg.lang = "en";
+    msg.text = message;
+    msg.lang = "en-GB";
+    msg.voice = voices?.filter(function (voice) {
+      return voice.name == "Google UK English Male";
+    })[0];
     function speak() {
       window.speechSynthesis.speak(msg);
     }
     speak();
   }
 
-  function agree() {
-    let msg = new SpeechSynthesisUtterance();
-
-    msg.text = "What a great idea. Can we go home now?";
-    msg.lang = "en";
-    function speak() {
-      window.speechSynthesis.speak(msg);
-    }
-    speak();
+  function handleNewButton(newButton) {
+    setCustomButtons([...customButtons, newButton]);
   }
 
-  function disagree() {
-    let msg = new SpeechSynthesisUtterance();
-
-    msg.text = "That is a terrible idea. Please exercise better judgement.";
-    msg.lang = "en";
-    function speak() {
-      window.speechSynthesis.speak(msg);
+  function handleDeleteButton(buttonId) {
+    const confirmation = confirm("do you want to delete this phrase?");
+    if (confirmation) {
+      setCustomButtons(
+        customButtons.filter((button) => button.id !== buttonId)
+      );
     }
-    speak();
   }
-
   return (
-    <Container>
-      <ButtonSection>
-        <button onClick={greeting}>greeting</button>
-        <button onClick={agree}>agree</button>
-        <button onClick={disagree}>disagree</button>
-      </ButtonSection>
-      <Textarea
-        value={text}
-        cols={35}
-        rows={10}
-        onChange={(event) => setText(event.target.value)}
-      />
+    <>
+      <Container>
+        <SelectButtonSection>
+          <button
+            onClick={() => setInput("preset")}
+            className={input === "preset" ? "current" : ""}
+          >
+            preset
+          </button>
+          <button
+            onClick={() => setInput("custom")}
+            className={input === "custom" ? "current" : ""}
+          >
+            custom
+          </button>
+          <button
+            onClick={() => setInput("freestyle")}
+            className={input === "freestyle" ? "current" : ""}
+          >
+            freestyle
+          </button>
+        </SelectButtonSection>
+        {input === "preset" && <PresetButtons onSpeak={handleSpeak} />}
 
-      <SecondSection>
-        <button onClick={speak}>speak</button>
-        <button onClick={pause}>pause</button>
-        <button onClick={resume}>resume</button>
-        <button onClick={cancel}>cancel</button>
-      </SecondSection>
-      {isSpeaking && "speaking"}
-      {isPaused && "paused"}
-      {isResumed && "resumed"}
-      {isEnded && "cancelled"}
-    </Container>
+        {input === "custom" && (
+          <CustomButtons
+            onToggleButtonForm={handleToggleButtonForm}
+            onSpeak={handleSpeak}
+            onAddNewButton={handleNewButton}
+            customButtons={customButtons}
+            buttonForm={buttonForm}
+            onDeleteButton={handleDeleteButton}
+          />
+        )}
+
+        {input === "freestyle" && (
+          <Textarea
+            value={text}
+            cols={35}
+            rows={10}
+            onChange={(event) => setText(event.target.value)}
+          />
+        )}
+
+        <StyledCommands>
+          <SecondSection>
+            {input === "freestyle" && <button onClick={speak}>speak</button>}
+            <button onClick={pause}>pause</button>
+            <button onClick={resume}>resume</button>
+            <button onClick={cancel}>cancel</button>
+          </SecondSection>
+        </StyledCommands>
+      </Container>
+    </>
   );
 }
 
@@ -83,25 +136,4 @@ const Container = styled.section`
   align-items: center;
   justify-content: center;
   margin: 2rem;
-`;
-
-const ButtonSection = styled.section`
-  align-items: space-around;
-  margin-bottom: 1rem;
-
-  button {
-    background-color: black;
-    color: white;
-    margin: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 5px;
-  }
-`;
-
-const Textarea = styled.textarea`
-  border: 1px solid black;
-`;
-
-const SecondSection = styled(ButtonSection)`
-  margin: 0;
 `;
