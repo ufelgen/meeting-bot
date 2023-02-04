@@ -54,6 +54,8 @@ export const useSpeechSynthesisApi = () => {
     setIsEnded(true);
   }, []);
 
+  const voices = window.speechSynthesis.getVoices();
+
   return {
     text,
     setText,
@@ -65,5 +67,6 @@ export const useSpeechSynthesisApi = () => {
     pause,
     resume,
     cancel,
+    voices,
   };
 };

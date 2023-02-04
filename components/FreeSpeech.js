@@ -23,6 +23,7 @@ export default function FreeSpeech() {
     pause,
     resume,
     cancel,
+    voices,
   } = useSpeechSynthesisApi();
 
   const testArray = [{ id: 1, name: "test", message: "huhu testi" }];
@@ -34,7 +35,7 @@ export default function FreeSpeech() {
     }
   );
   const [buttonForm, setButtonForm] = useState(false);
-
+  console.log("voices", voices);
   /*   if (typeof window !== "undefined") {
     const synth = window.speechSynthesis;
     const amISpeaking = synth.speaking;
@@ -49,7 +50,10 @@ export default function FreeSpeech() {
     let msg = new SpeechSynthesisUtterance();
 
     msg.text = message;
-    msg.lang = "en";
+    msg.lang = "en-GB";
+    msg.voice = voices?.filter(function (voice) {
+      return voice.name == "Google UK English Male";
+    })[0];
     function speak() {
       window.speechSynthesis.speak(msg);
     }
@@ -68,7 +72,6 @@ export default function FreeSpeech() {
       );
     }
   }
-  console.log(customButtons);
   return (
     <>
       <Container>
