@@ -49,7 +49,7 @@ export default function FreeSpeech() {
     let msg = new SpeechSynthesisUtterance();
 
     msg.text = message;
-    msg.lang = "en-GB";
+    msg.lang = "en";
     /*     msg.voice = voices?.filter(function (voice) {
       return voice.name == "Google UK English Male";
     })[0]; */
