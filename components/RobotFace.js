@@ -64,23 +64,6 @@ const RightPupil = styled(Pupil)`
 `;
 
 const Mouth = styled.div`
-  .animate {
-    @keyframes changewidth {
-      from {
-        transform: scaleX(1);
-      }
-
-      to {
-        transform: scaleX(1.5);
-      }
-    }
-
-    animation-duration: 0.3s;
-    animation-name: changewidth;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-  }
-
   position: absolute;
   border: 2px solid black;
   background-color: white;
