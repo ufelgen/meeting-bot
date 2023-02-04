@@ -25,12 +25,11 @@ export default function FreeSpeech() {
     cancel,
   } = useSpeechSynthesisApi();
 
-  const testArray = [{ id: 1, name: "test", message: "huhu testi" }];
   const [input, setInput] = useState("preset");
   const [customButtons, setCustomButtons] = useLocalStorageState(
     "customButtons",
     {
-      defaultValue: testArray,
+      defaultValue: [],
     }
   );
   const [buttonForm, setButtonForm] = useState(false);
