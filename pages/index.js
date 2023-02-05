@@ -32,15 +32,22 @@ export default function Home() {
   function onSetInput(input) {
     setInput(input);
   }
-  function onSetButtonForm(buttonForm) {
-    setButtonForm(buttonForm);
+
+  function pauseSpeaking() {
+    pause();
+    setCurrentlySpeaking(false);
   }
-  function onSetCustomButtons(customButtons) {
-    setCustomButtons(customButtons);
+
+  function resumeSpeaking() {
+    resume();
+    setCurrentlySpeaking(true);
   }
-  function onSetCurrentlySpeaking(currentlySpeaking) {
-    setCurrentlySpeaking(currentlySpeaking);
+
+  function cancelSpeaking() {
+    cancel();
+    setCurrentlySpeaking(false);
   }
+
   function handleToggleButtonForm() {
     setButtonForm(!buttonForm);
   }
@@ -86,18 +93,10 @@ export default function Home() {
       <FreeSpeech
         text={text}
         onSetText={setText}
-        isSpeaking={isSpeaking}
-        isPaused={isPaused}
-        isResumed={isResumed}
-        isEnded={isEnded}
-        speak={speak}
-        pause={pause}
-        resume={resume}
-        cancel={cancel}
+        pause={pauseSpeaking}
+        resume={resumeSpeaking}
+        cancel={cancelSpeaking}
         onSetInput={onSetInput}
-        onSetButtonForm={onSetButtonForm}
-        onSetCurrentlySpeaking={onSetCurrentlySpeaking}
-        onSetCustomButtons={onSetCustomButtons}
         onToggleButtonForm={handleToggleButtonForm}
         onSpeak={handleSpeak}
         onNewButton={handleNewButton}

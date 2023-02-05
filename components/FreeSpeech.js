@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 import PresetButtons from "./PresetButtons";
 import CustomButtons from "./CustomButtons";
 import {
@@ -12,18 +11,10 @@ import {
 export default function FreeSpeech({
   text,
   onSetText,
-  isSpeaking,
-  isPaused,
-  isResumed,
-  isEnded,
-  speak,
   pause,
   resume,
   cancel,
   onSetInput,
-  onSetButtonForm,
-  onSetCurrentlySpeaking,
-  onSetCustomButtons,
   onToggleButtonForm,
   onSpeak,
   onNewButton,
