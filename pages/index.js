@@ -58,12 +58,10 @@ export default function Home() {
     }
     msg.onstart = (event) => {
       setCurrentlySpeaking(true);
-      console.log("start");
     };
 
     msg.onend = (event) => {
       setCurrentlySpeaking(false);
-      console.log("end");
     };
     speak();
   }
