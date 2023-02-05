@@ -84,7 +84,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <RobotFace />
+      <RobotFace currentlySpeaking={currentlySpeaking} />
       <FreeSpeech
         text={text}
         onSetText={setText}

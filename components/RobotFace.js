@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-export default function RobotFace() {
+export default function RobotFace({ currentlySpeaking }) {
   return (
     <Container>
       <Face>
         <LeftEye /> <RightEye />
         <LeftPupil /> <RightPupil />
-        <Mouth />
+        <Mouth className={currentlySpeaking ? "speaking" : ""} />
       </Face>
     </Container>
   );
@@ -71,4 +71,17 @@ const Mouth = styled.div`
   width: 150px;
   top: 150px;
   left: 50px;
+
+  &.speaking {
+    animation: pulse 0.3s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      height: 50px;
+    }
+    100% {
+      height: 45px;
+    }
+  }
 `;
