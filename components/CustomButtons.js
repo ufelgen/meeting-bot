@@ -12,7 +12,7 @@ import { nanoid } from "nanoid";
 export default function CustomButtons({
   onToggleButtonForm,
   onSpeak,
-  onAddNewButton,
+  onNewButton,
   customButtons,
   buttonForm,
   onDeleteButton,
@@ -26,7 +26,7 @@ export default function CustomButtons({
       message: event.target.elements.message.value,
     };
 
-    onAddNewButton(newButton);
+    onNewButton(newButton);
     onToggleButtonForm();
   }
   return (
